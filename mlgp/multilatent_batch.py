@@ -65,7 +65,7 @@ Nr = 10
 for r in range(Nr):
     for v in vals:
 
-        inputfile = 'simdata_p8_r5.csv'#'simdata_p' + str(v) + '_r' + str(r) + '.csv'
+        inputfile = 'simdata_p' + str(v) + '_r' + str(r) + '.csv'
 
 
 
@@ -141,44 +141,7 @@ for r in range(Nr):
         training_loss = svgp.training_loss_closure(data, compile=True)
         opt.minimize(training_loss, variables=svgp.trainable_variables,options=dict(maxiter=2000) )
 
-        #for i in (range(0)):
-
-        #    res = opt.minimize(training_loss, variables=svgp.trainable_variables,options=dict(maxiter=100, gtol=0.5))
-        #    print(res)
-        #    if res.success: break
-
-        #v1 = svgp.kernel.kernels[0].variance.numpy()
-        #v2 = svgp.kernel.kernels[1].variance.numpy()
-
-        #l1 = svgp.kernel.kernels[0].lengthscales.numpy()
-        #l2 = svgp.kernel.kernels[1].lengthscales.numpy()
-        #means = svgp.mean_function.c.numpy()
-
-
-        #kernel = gpf.kernels.SeparateIndependent(
-        #    [
-        #        gpf.kernels.Matern32(variance=v1,lengthscales=l1),  # This is k1, the kernel of f
-        #        gpf.kernels.Matern32(variance=v2,lengthscales=l2),  # this is k2, the kernel of g
-
-        #    ]
-        #)
-        #mean_fn = gpf.mean_functions.Constant(c=means)
-
-
-        #svgp = gpf.models.SVGP(inducing_variable=inducing_variable,
-        #                        kernel=kernel,
-        #                        mean_function=mean_fn,
-        #                        num_latent_gps=num_latent_gps,
-        #                        likelihood = likelihood, q_diag=False  )
-
-        #gpf.set_trainable(svgp.trainable_parameters,False)
-        #gpf.set_trainable(svgp.q_mu, True)
-        #gpf.set_trainable(svgp.q_sqrt, True)
-
-
-        #opt = gpf.optimizers.Scipy()
-        #training_loss = svgp.training_loss_closure(data, compile=True)
-        #opt.minimize(training_loss, variables=svgp.trainable_variables)#,options=dict(maxiter=2000, gtol=0.05))
+        
 
         ngrid=50
         pred_locations = np.array([np.linspace(0.5,49.5,ngrid),np.linspace(0.5,49.5,ngrid)])
@@ -188,7 +151,7 @@ for r in range(Nr):
         x_grid = np.array([xx.flatten(), yy.flatten()]).T
 
         nsamp = 20000
-        y_pred = svgp.predict_f_samples(x_grid,nsamp).numpy()#+0.5*vgp.predict_f(x_grid)[1].numpy()
+        y_pred = svgp.predict_f_samples(x_grid,nsamp).numpy()
         f_pred = y_pred[...,0]
         g_pred = y_pred[...,1]
 
@@ -203,4 +166,4 @@ for r in range(Nr):
         ml_est = (np.percentile(totals,50))
         print(inputfile, ": True value: ", trueW, " ML GP estimate: ", ml_est, ml_est/trueW, " (95% CI: ", LCI, LCI/trueW, ",",UCI, UCI/trueW,")", flush=True)
 
-        break
+        
